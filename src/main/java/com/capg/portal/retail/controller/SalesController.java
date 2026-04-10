@@ -1,4 +1,4 @@
-package com.capg.portal.retial.controller;
+package com.capg.portal.retail.controller;
 
 import com.capg.portal.retail.entity.Sales;
 import com.capg.portal.retail.service.SalesService;
