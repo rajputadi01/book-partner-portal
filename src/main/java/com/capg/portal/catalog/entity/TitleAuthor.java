@@ -2,6 +2,7 @@ package com.capg.portal.catalog.entity;
 
 import com.capg.portal.creator.entity.Author;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,13 @@ import lombok.NoArgsConstructor;
 public class TitleAuthor {
 
     @Id
+    @NotNull(message="Auhtor selection is required")
     @ManyToOne
     @JoinColumn(name = "au_id")
     private Author author;
 
     @Id
+    @NotNull(message="Title selection is required")
     @ManyToOne
     @JoinColumn(name = "title_id")
     private Title title;
