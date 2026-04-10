@@ -16,7 +16,7 @@ public class DiscountService {
 		return discountRepository.save(discount);
 	}
 	
-	public List<Discount> getAllDiscount(){
+	public List<Discount> getAllDiscounts(){
 		return discountRepository.findAll();
 	}
 	
