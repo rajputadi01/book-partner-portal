@@ -1,18 +1,12 @@
 package com.capg.portal.retail.entity;
 
-import java.time.LocalDateTime;
-
 import com.capg.portal.catalog.entity.Title;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sales")
@@ -21,77 +15,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sales {
-	@Id
-	@ManyToOne
-	@Column(name="stor_id")
-	private Store store;
 
     @Id
+    @NotNull(message = "Store selection is required")
+    @ManyToOne
+    @JoinColumn(name = "stor_id")
+    private Store store;
+
+    @Id
+    @NotBlank(message = "Order Number is required")
+    @Size(max = 20, message = "Order Number cannot exceed 20 characters")
     @Column(name = "ord_num", length = 20)
     private String ordNum;
-    
+
     @Id
+    @NotNull(message = "Title selection is required")
     @ManyToOne
-    @Column(name="title-id")
+    @JoinColumn(name = "title_id")
     private Title title;
-    
-    public Store getStore() {
-		return store;
-	}
 
-	public void setStore(Store store) {
-		this.store = store;
-	}
-
-	public String getOrdNum() {
-		return ordNum;
-	}
-
-	public void setOrdNum(String ordNum) {
-		this.ordNum = ordNum;
-	}
-
-	public Title getTitle() {
-		return title;
-	}
-
-	public void setTitle(Title title) {
-		this.title = title;
-	}
-
-	public LocalDateTime getOrdDate() {
-		return ordDate;
-	}
-
-	public void setOrdDate(LocalDateTime ordDate) {
-		this.ordDate = ordDate;
-	}
-
-	public Short getQty() {
-		return qty;
-	}
-
-	public void setQty(Short qty) {
-		this.qty = qty;
-	}
-
-	public String getPayterms() {
-		return payterms;
-	}
-
-	public void setPayterms(String payterms) {
-		this.payterms = payterms;
-	}
-
-	@Column(name = "ord_date")
+    @Column(name = "ord_date")
     private LocalDateTime ordDate;
 
+    @NotNull(message = "Quantity is required")
+    @Min(value = 1, message = "Quantity must be at least 1")
     @Column(name = "qty", columnDefinition = "smallint")
     private Short qty;
 
+    @NotBlank(message = "Payment terms are required")
+    @Size(max = 12, message = "Payment terms cannot exceed 12 characters")
     @Column(name = "payterms", length = 12)
     private String payterms;
-
-	
-
 }

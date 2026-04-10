@@ -14,9 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SalesService {
 	private final SalesRepository salesRepository;
-	public SalesService(SalesRepository salesRepository) {
-        this.salesRepository = salesRepository;
-    }
+	
 	
 	public Sales createSales(Sales sale) {
 		return salesRepository.save(sale);
