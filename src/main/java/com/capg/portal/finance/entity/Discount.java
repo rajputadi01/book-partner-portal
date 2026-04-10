@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal; // 1. Added this import
+
 @Entity
 @Table(name = "discounts")
 @Data
@@ -37,6 +39,6 @@ public class Discount {
 
     @NotNull(message="Discount amount is required")
     @Digits(integer=2, fraction=2, message= "Must be a valid percentage e.g : 10.50")
-    @Column(name = "discount")
-    private Double discountAmount; 
+    @Column(name = "discount", columnDefinition = "decimal(4,2)") // 2. Added explicit SQL definition
+    private BigDecimal discountAmount; // 3. Changed from Double to BigDecimal
 }
