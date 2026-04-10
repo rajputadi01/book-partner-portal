@@ -14,7 +14,8 @@ public class PublisherService {
     private final PublisherRepository publisherRepository;
 
     public Publisher createPublisher(Publisher publisher) {
-        return publisherRepository.save(publisher);
+        
+    	return publisherRepository.save(publisher);
     }
 
     public List<Publisher> getAllPublishers() {

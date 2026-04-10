@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Publisher {
 
-    @Id
+    @Id 
     @NotBlank(message = "Publisher ID is required")
     @Pattern(regexp = "^(1389|0736|0877|1622|1756|99[0-9]{2})$", message = "ID must be 1389, 0736, 0877, 1622, 1756, or start with 99 followed by 2 digits")
     @Column(name = "pub_id", columnDefinition = "char(4)")
