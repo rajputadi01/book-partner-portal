@@ -12,9 +12,7 @@ import java.util.List;
 public class RoyaltyScheduleService {
 
 	 private final RoyaltyScheduleRepository royaltyScheduleRepository;
-	    public RoyaltyScheduleService(RoyaltyScheduleRepository royaltyScheduleRepository) {
-	        this.royaltyScheduleRepository = royaltyScheduleRepository;
-	    }
+	 
     public RoyaltySchedule createRoyaltySchedule(RoyaltySchedule schedule) {
         return royaltyScheduleRepository.save(schedule);
     }

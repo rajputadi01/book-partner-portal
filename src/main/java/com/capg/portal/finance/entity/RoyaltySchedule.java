@@ -14,45 +14,6 @@ import jakarta.validation.constraints.*;
 @AllArgsConstructor
 public class RoyaltySchedule {
 
-    public Integer getRoyschedId() {
-		return royschedId;
-	}
-
-	public void setRoyschedId(Integer royschedId) {
-		this.royschedId = royschedId;
-	}
-
-	public Title getTitle() {
-		return title;
-	}
-
-	public void setTitle(Title title) {
-		this.title = title;
-	}
-
-	public Integer getLorange() {
-		return lorange;
-	}
-
-	public void setLorange(Integer lorange) {
-		this.lorange = lorange;
-	}
-
-	public Integer getHirange() {
-		return hirange;
-	}
-
-	public void setHirange(Integer hirange) {
-		this.hirange = hirange;
-	}
-
-	public Integer getRoyalty() {
-		return royalty;
-	}
-
-	public void setRoyalty(Integer royalty) {
-		this.royalty = royalty;
-	}
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
