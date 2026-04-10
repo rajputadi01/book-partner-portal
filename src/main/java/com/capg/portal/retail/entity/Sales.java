@@ -35,7 +35,55 @@ public class Sales {
     @Column(name="title-id")
     private Title title;
     
-    @Column(name = "ord_date")
+    public Store getStore() {
+		return store;
+	}
+
+	public void setStore(Store store) {
+		this.store = store;
+	}
+
+	public String getOrdNum() {
+		return ordNum;
+	}
+
+	public void setOrdNum(String ordNum) {
+		this.ordNum = ordNum;
+	}
+
+	public Title getTitle() {
+		return title;
+	}
+
+	public void setTitle(Title title) {
+		this.title = title;
+	}
+
+	public LocalDateTime getOrdDate() {
+		return ordDate;
+	}
+
+	public void setOrdDate(LocalDateTime ordDate) {
+		this.ordDate = ordDate;
+	}
+
+	public Short getQty() {
+		return qty;
+	}
+
+	public void setQty(Short qty) {
+		this.qty = qty;
+	}
+
+	public String getPayterms() {
+		return payterms;
+	}
+
+	public void setPayterms(String payterms) {
+		this.payterms = payterms;
+	}
+
+	@Column(name = "ord_date")
     private LocalDateTime ordDate;
 
     @Column(name = "qty", columnDefinition = "smallint")
