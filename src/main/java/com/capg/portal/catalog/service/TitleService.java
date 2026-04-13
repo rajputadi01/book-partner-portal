@@ -1,7 +1,14 @@
 package com.capg.portal.catalog.service;
 
 import com.capg.portal.catalog.entity.Title;
+import com.capg.portal.catalog.entity.TitleAuthor;
+import com.capg.portal.catalog.repository.TitleAuthorRepository;
 import com.capg.portal.catalog.repository.TitleRepository;
+import com.capg.portal.finance.entity.RoyaltySchedule;
+import com.capg.portal.finance.repository.RoyaltyScheduleRepository;
+import com.capg.portal.retail.entity.Sales;
+import com.capg.portal.retail.repository.SalesRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,10 +18,34 @@ import java.util.List;
 public class TitleService {
 
     private final TitleRepository titleRepository;
+    private final SalesRepository salesRepository;
+    private final RoyaltyScheduleRepository royaltyRepository;
+    private final TitleAuthorRepository titleAuthorRepository;
 
-    // Constructor Injection (Replaces Lombok)
-    public TitleService(TitleRepository titleRepository) {
+    // Update your constructor to include them
+    public TitleService(TitleRepository titleRepository, 
+                        SalesRepository salesRepository, 
+                        RoyaltyScheduleRepository royaltyRepository, 
+                        TitleAuthorRepository titleAuthorRepository) {
         this.titleRepository = titleRepository;
+        this.salesRepository = salesRepository;
+        this.royaltyRepository = royaltyRepository;
+        this.titleAuthorRepository = titleAuthorRepository;
+    }
+
+    // 1. Fetch Sales for a Title
+    public List<Sales> getSalesByTitle(String titleId) {
+        return salesRepository.findByTitleTitleId(titleId);
+    }
+
+    // 2. Fetch Royalties for a Title
+    public List<RoyaltySchedule> getRoyaltiesByTitle(String titleId) {
+        return royaltyRepository.findByTitleTitleId(titleId);
+    }
+
+    // 3. Fetch Authors for a Title
+    public List<TitleAuthor> getAuthorsByTitle(String titleId) {
+        return titleAuthorRepository.findByTitleTitleId(titleId);
     }
 
     public Title createTitle(Title title) {

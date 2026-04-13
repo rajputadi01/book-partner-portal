@@ -1,7 +1,11 @@
 package com.capg.portal.catalog.controller;
 
 import com.capg.portal.catalog.entity.Title;
+import com.capg.portal.catalog.entity.TitleAuthor;
 import com.capg.portal.catalog.service.TitleService;
+import com.capg.portal.finance.entity.RoyaltySchedule;
+import com.capg.portal.retail.entity.Sales;
+
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -19,25 +23,25 @@ public class TitleController {
 
     private final TitleService titleService;
 
-    // Constructor Injection (Replaces Lombok)
-    public TitleController(TitleService titleService) {
+    public TitleController(TitleService titleService) 
+    {
         this.titleService = titleService;
     }
 
     // 1. GET Request: Get all titles
     @GetMapping
-    public ResponseEntity<List<Title>> getAllTitles() {
-        return new ResponseEntity<>(titleService.getAllTitles(), HttpStatus.OK); // 200 OK
+    public ResponseEntity<List<Title>> getAllTitles() 
+    {
+        return new ResponseEntity<>(titleService.getAllTitles(), HttpStatus.OK);
     }
 
-    // 2. GET Request: Get title by ID
     @GetMapping("/{id}")
     public ResponseEntity<?> getTitleById(@PathVariable("id") String id) {
         try {
             Title title = titleService.getTitleById(id);
-            return new ResponseEntity<>(title, HttpStatus.OK); // 200 OK
+            return new ResponseEntity<>(title, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); // 404 Not Found
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -123,5 +127,23 @@ public class TitleController {
     public ResponseEntity<List<Title>> filterTitlesByDateBefore(
             @RequestParam("beforeDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime beforeDate) {
         return new ResponseEntity<>(titleService.getTitlesPublishedBefore(beforeDate), HttpStatus.OK); // 200 OK
+    }
+    
+ // 1. Get all sales for a specific title
+    @GetMapping("/{id}/sales")
+    public ResponseEntity<List<Sales>> getTitleSales(@PathVariable String id) {
+        return ResponseEntity.ok(titleService.getSalesByTitle(id));
+    }
+
+    // 2. Get all royalty schedules for a specific title
+    @GetMapping("/{id}/royalties")
+    public ResponseEntity<List<RoyaltySchedule>> getTitleRoyalties(@PathVariable String id) {
+        return ResponseEntity.ok(titleService.getRoyaltiesByTitle(id));
+    }
+
+    // 3. Get all authors mapped to this title
+    @GetMapping("/{id}/authors")
+    public ResponseEntity<List<TitleAuthor>> getTitleAuthors(@PathVariable String id) {
+        return ResponseEntity.ok(titleService.getAuthorsByTitle(id));
     }
 }
