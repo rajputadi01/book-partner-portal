@@ -45,4 +45,22 @@ public class SalesService {
     public List<Sales> getSalesByTitleId(String titleId) {
         return salesRepository.findByTitleTitleId(titleId);
     }
+    
+    public int getTotalQtyByStore(String storId) {
+        return salesRepository.findByStoreStorId(storId)
+                .stream()
+                .mapToInt(Sales::getQty)
+                .sum();
+    }
+    
+    public long getTransactionCountByStore(String storId) {
+        return salesRepository.findByStoreStorId(storId).size();
+    }
+    
+    public int getTotalQtyByTitle(String titleId) {
+        return salesRepository.findByTitleTitleId(titleId)
+                .stream()
+                .mapToInt(Sales::getQty)
+                .sum();
+    }
 }
