@@ -38,12 +38,10 @@ public class SalesService {
         return salesRepository.save(existing);
     }
     
-    // Filter by Store ID
     public List<Sales> getSalesByStoreId(String storId) {
         return salesRepository.findByStoreStorId(storId);
     }
 
-    // Filter by Title ID
     public List<Sales> getSalesByTitleId(String titleId) {
         return salesRepository.findByTitleTitleId(titleId);
     }
