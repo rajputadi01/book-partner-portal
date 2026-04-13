@@ -131,7 +131,7 @@ public class JobController {
         }
     }
 
-    // 8. PATCH: Change an employee's job and/or job level
+    // 8. PATCH: Change an employee's job and/or job level. this part is new.
     @PatchMapping("/employees/{empId}/job")
     public ResponseEntity<?> changeEmployeeJob(@PathVariable("empId") String empId,
                                                @Valid @RequestBody ChangeJobRequest request,
