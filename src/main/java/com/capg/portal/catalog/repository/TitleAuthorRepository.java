@@ -10,12 +10,10 @@ import java.util.List;
 @Repository
 public interface TitleAuthorRepository extends JpaRepository<TitleAuthor, TitleAuthorId> {
     
-    // Existing Method
     List<TitleAuthor> findByRoyaltyPerLessThan(Integer royaltyPer);
+    List<TitleAuthor> findByRoyaltyPerGreaterThan(Integer royaltyPer);
 
-    // New Method: Find by Author ID
     List<TitleAuthor> findByAuthorAuId(String auId);
 
-    // New Method: Find by Title ID
     List<TitleAuthor> findByTitleTitleId(String titleId);
 }
