@@ -35,4 +35,9 @@ public class StoreService {
         existingStore.setZip(storeDetails.getZip());
         return storeRepository.save(existingStore);
     }
+    
+    public List<Store> getStoresByCity(String city) 
+    {
+        return storeRepository.findByCityIgnoreCase(city);
+    }
 }

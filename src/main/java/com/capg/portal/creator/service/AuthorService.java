@@ -38,4 +38,9 @@ public class AuthorService {
         existingAuthor.setContract(authorDetails.getContract());
         return authorRepository.save(existingAuthor);
     }
+    
+    public List<Author> getAuthorsByContractStatus(Integer contractStatus) 
+    {
+        return authorRepository.findByContract(contractStatus);
+    }
 }
