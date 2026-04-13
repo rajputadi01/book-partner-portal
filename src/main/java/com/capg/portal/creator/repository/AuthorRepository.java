@@ -9,9 +9,8 @@ import java.util.List;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, String> {
     
-    List<Author> findByContract(Integer contract);
-    
-    List<Author> findByCityIgnoreCase(String city);
-    
+    List<Author> findByContract(Integer contract);    
+    List<Author> findByCityIgnoreCase(String city);    
     List<Author> findByStateIgnoreCase(String state);
+    
 }

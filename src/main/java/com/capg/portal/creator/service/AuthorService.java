@@ -11,7 +11,6 @@ public class AuthorService {
 
     private final AuthorRepository authorRepository;
 
-    // Constructor Injection (Replaces Lombok's @RequiredArgsConstructor)
     public AuthorService(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
@@ -46,12 +45,10 @@ public class AuthorService {
         return authorRepository.findByContract(contract);
     }
 
-    // New Method: Find by City
     public List<Author> getAuthorsByCity(String city) {
         return authorRepository.findByCityIgnoreCase(city);
     }
 
-    // New Method: Find by State
     public List<Author> getAuthorsByState(String state) {
         return authorRepository.findByStateIgnoreCase(state);
     }
