@@ -101,4 +101,29 @@ public class SalesController {
     public ResponseEntity<List<Sales>> filterSalesByTitle(@RequestParam("titleId") String titleId) {
         return new ResponseEntity<>(salesService.getSalesByTitleId(titleId), HttpStatus.OK); 
     }
+    
+    @GetMapping("/store/{storId}/total-qty")
+    public ResponseEntity<Integer> getTotalQtyByStore(@PathVariable String storId) {
+        return new ResponseEntity<>(
+                salesService.getTotalQtyByStore(storId),
+                HttpStatus.OK
+        );
+    }
+    
+    @GetMapping("/store/{storId}/count")
+    public ResponseEntity<Long> getTransactionCountByStore(@PathVariable String storId) {
+        return new ResponseEntity<>(
+                salesService.getTransactionCountByStore(storId),
+                HttpStatus.OK
+        );
+    }
+    
+    
+    @GetMapping("/title/{titleId}/total-qty")
+    public ResponseEntity<Integer> getTotalQtyByTitle(@PathVariable String titleId) {
+        return new ResponseEntity<>(
+                salesService.getTotalQtyByTitle(titleId),
+                HttpStatus.OK
+        );
+    }
 }
