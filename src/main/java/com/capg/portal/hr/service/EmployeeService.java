@@ -37,4 +37,10 @@ public class EmployeeService {
         existingEmployee.setHireDate(employeeDetails.getHireDate());
         return employeeRepository.save(existingEmployee);
     }
+    
+    // Add this to EmployeeService.java
+    public List<Employee> getEmployeesByJobId(Short jobId) 
+    {
+        return employeeRepository.findByJob_JobId(jobId);
+    }
 }

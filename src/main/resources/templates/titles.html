@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Titles</title>
+</head>
+<body>
+
+    <h1>Titles Management</h1>
+    <a th:href="@{/}">Back to Home Hub</a>
+    <hr>
+
+    <h3>Add New Title</h3>
+    <form th:action="@{/titles}" th:object="${title}" method="post">
+        
+        <label>Title ID (Max 10 chars):</label>
+        <input type="text" th:field="*{titleId}" maxlength="10" />
+        <span th:if="${#fields.hasErrors('titleId')}" th:errors="*{titleId}" style="color:red"></span>
+        <br><br>
+
+        <label>Book Title:</label>
+        <input type="text" th:field="*{titleName}" maxlength="80"/>
+        <span th:if="${#fields.hasErrors('titleName')}" th:errors="*{titleName}" style="color:red"></span>
+        <br><br>
+
+        <label>Type / Genre:</label>
+        <input type="text" th:field="*{type}" maxlength="12" />
+        <span th:if="${#fields.hasErrors('type')}" th:errors="*{type}" style="color:red"></span>
+        <br><br>
+
+        <label>Publisher:</label>
+        <select th:field="*{publisher}">
+            <option value="">-- No Publisher / Independent --</option>
+            <option th:each="p : ${listPublishers}" th:value="${p.pubId}" th:text="${p.pubName}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}" style="color:red"></span>
+        <br><br>
+
+        <label>Price ($):</label>
+        <input type="number" step="0.01" th:field="*{price}" />
+        <br><br>
+
+        <label>Advance ($):</label>
+        <input type="number" step="0.01" th:field="*{advance}" />
+        <br><br>
+
+        <label>Royalty (%):</label>
+        <input type="number" th:field="*{royalty}" />
+        <br><br>
+
+        <label>YTD Sales:</label>
+        <input type="number" th:field="*{ytdSales}" />
+        <br><br>
+
+        <label>Notes:</label>
+        <textarea th:field="*{notes}" rows="3" cols="30" maxlength="200"></textarea>
+        <span th:if="${#fields.hasErrors('notes')}" th:errors="*{notes}" style="color:red"></span>
+        <br><br>
+
+        <label>Publish Date:</label>
+        <input type="datetime-local" th:field="*{pubdate}" />
+        <span th:if="${#fields.hasErrors('pubdate')}" th:errors="*{pubdate}" style="color:red"></span>
+        <br><br>
+
+        <button type="submit">Save Book Title</button>
+    </form>
+
+    <hr>
+
+    <h3>Current Catalog</h3>
+
+    <form th:action="@{/titles/filter}" method="get" style="margin-bottom: 15px;">
+        <label>Filter Price Less Than ($):</label>
+        <input type="number" step="0.01" name="maxPrice" placeholder="e.g. 20.00" required />
+        <button type="submit">Filter</button>
+        <a th:href="@{/titles}">Clear Filter</a>
+    </form>
+
+    <table border="1" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Title ID</th>
+                <th>Book Title</th>
+                <th>Type</th>
+                <th>Publisher</th>
+                <th>Price</th>
+                <th>Advance</th>
+                <th>Royalty</th>
+                <th>YTD Sales</th>
+                <th>Pub Date</th>
+                <th>Action</th> </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${listTitles}">
+                <td th:text="${book.titleId}"></td>
+                <td th:text="${book.titleName}"></td>
+                <td th:text="${book.type}"></td>
+                <td th:text="${book.publisher != null ? book.publisher.pubName : 'N/A'}"></td>
+                <td th:text="${book.price != null ? '$' + book.price : 'N/A'}"></td>
+                <td th:text="${book.advance != null ? '$' + book.advance : 'N/A'}"></td>
+                <td th:text="${book.royalty != null ? book.royalty + '%' : 'N/A'}"></td>
+                <td th:text="${book.ytdSales}"></td>
+                <td th:text="${book.pubdate != null ? #temporals.format(book.pubdate, 'yyyy-MM-dd') : 'N/A'}"></td>
+                <td>
+                    <a th:href="@{/titles/edit/{id}(id=${book.titleId})}">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

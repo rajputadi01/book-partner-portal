@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Title</title>
+</head>
+<body>
+
+    <h1>Edit Book Title</h1>
+    <a th:href="@{/titles}">Cancel and Return to Catalog</a>
+    <hr>
+
+    <form th:action="@{/titles/update/{id}(id=${title.titleId})}" th:object="${title}" method="post">
+        
+        <label>Title ID:</label>
+        <span th:text="*{titleId}"></span>
+        <input type="hidden" th:field="*{titleId}" />
+        <br><br>
+
+        <label>Book Title:</label>
+        <input type="text" th:field="*{titleName}" maxlength="80"/>
+        <span th:if="${#fields.hasErrors('titleName')}" th:errors="*{titleName}" style="color:red"></span>
+        <br><br>
+
+        <label>Type / Genre:</label>
+        <input type="text" th:field="*{type}" maxlength="12" />
+        <span th:if="${#fields.hasErrors('type')}" th:errors="*{type}" style="color:red"></span>
+        <br><br>
+
+        <label>Publisher:</label>
+        <select th:field="*{publisher}">
+            <option value="">-- No Publisher / Independent --</option>
+            <option th:each="p : ${listPublishers}" th:value="${p.pubId}" th:text="${p.pubName}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}" style="color:red"></span>
+        <br><br>
+
+        <label>Price ($):</label>
+        <input type="number" step="0.01" th:field="*{price}" />
+        <br><br>
+
+        <label>Advance ($):</label>
+        <input type="number" step="0.01" th:field="*{advance}" />
+        <br><br>
+
+        <label>Royalty (%):</label>
+        <input type="number" th:field="*{royalty}" />
+        <br><br>
+
+        <label>YTD Sales:</label>
+        <input type="number" th:field="*{ytdSales}" />
+        <br><br>
+
+        <label>Notes:</label>
+        <textarea th:field="*{notes}" rows="3" cols="30" maxlength="200"></textarea>
+        <span th:if="${#fields.hasErrors('notes')}" th:errors="*{notes}" style="color:red"></span>
+        <br><br>
+
+        <label>Publish Date:</label>
+        <input type="datetime-local" th:field="*{pubdate}" />
+        <span th:if="${#fields.hasErrors('pubdate')}" th:errors="*{pubdate}" style="color:red"></span>
+        <br><br>
+
+        <button type="submit">Update Book Title</button>
+    </form>
+
+</body>
+</html>

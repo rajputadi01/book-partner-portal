@@ -43,4 +43,9 @@ public class TitleService
         existingTitle.setPubdate(titleDetails.getPubdate());
         return titleRepository.save(existingTitle);
     }
+    
+    public List<Title> getTitlesByPriceLessThan(Double maxPrice) 
+    {
+        return titleRepository.findByPriceLessThan(maxPrice);
+    }
 }

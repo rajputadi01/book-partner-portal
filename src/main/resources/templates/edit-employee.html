@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee</title>
+</head>
+<body>
+
+    <h1>Edit Employee</h1>
+    <a th:href="@{/employees}">Cancel and Return to Employees</a>
+    <hr>
+
+    <form th:action="@{/employees/update/{id}(id=${employee.empId})}" th:object="${employee}" method="post">
+        
+        <label>Employee ID:</label>
+        <span th:text="*{empId}"></span>
+        <input type="hidden" th:field="*{empId}" />
+        <br><br>
+
+        <label>First Name:</label>
+        <input type="text" th:field="*{fname}" maxlength="20" />
+        <span th:if="${#fields.hasErrors('fname')}" th:errors="*{fname}" style="color:red"></span>
+        <br><br>
+
+        <label>Middle Initial:</label>
+        <input type="text" th:field="*{minit}" maxlength="1" />
+        <span th:if="${#fields.hasErrors('minit')}" th:errors="*{minit}" style="color:red"></span>
+        <br><br>
+
+        <label>Last Name:</label>
+        <input type="text" th:field="*{lname}" maxlength="30" />
+        <span th:if="${#fields.hasErrors('lname')}" th:errors="*{lname}" style="color:red"></span>
+        <br><br>
+
+        <label>Job Level:</label>
+        <input type="number" th:field="*{jobLvl}" />
+        <span th:if="${#fields.hasErrors('jobLvl')}" th:errors="*{jobLvl}" style="color:red"></span>
+        <br><br>
+
+        <label>Job Role:</label>
+        <select th:field="*{job}">
+            <option value="">-- Select a Job --</option>
+            <option th:each="j : ${listJobs}" th:value="${j.jobId}" th:text="${j.jobDesc}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('job')}" th:errors="*{job}" style="color:red"></span>
+        <br><br>
+
+        <label>Publisher:</label>
+        <select th:field="*{publisher}">
+            <option value="">-- Select a Publisher --</option>
+            <option th:each="p : ${listPublishers}" th:value="${p.pubId}" th:text="${p.pubName}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}" style="color:red"></span>
+        <br><br>
+
+        <label>Hire Date:</label>
+        <input type="datetime-local" th:field="*{hireDate}" />
+        <br><br>
+
+        <button type="submit">Update Employee</button>
+    </form>
+
+</body>
+</html>
