@@ -5,22 +5,19 @@ import java.util.Objects;
 
 public class SalesId implements Serializable {
     
-    private String store;  // Matches the field name in Sales
-    private String ordNum; // Matches the field name in Sales
-    private String title;  // Matches the field name in Sales
+    private String store; 
+    private String ordNum;
+    private String title;
 
-    // Default Constructor
     public SalesId() {
     }
 
-    // Parameterized Constructor
     public SalesId(String store, String ordNum, String title) {
         this.store = store;
         this.ordNum = ordNum;
         this.title = title;
     }
 
-    // Getters and Setters
     public String getStore() { return store; }
     public void setStore(String store) { this.store = store; }
 
@@ -30,7 +27,7 @@ public class SalesId implements Serializable {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    // Required for Composite Keys
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
