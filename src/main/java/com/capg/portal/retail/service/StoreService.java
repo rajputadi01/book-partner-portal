@@ -11,7 +11,6 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
 
-    // Constructor Injection (Replaces Lombok's @RequiredArgsConstructor)
     public StoreService(StoreRepository storeRepository) {
         this.storeRepository = storeRepository;
     }
@@ -39,12 +38,10 @@ public class StoreService {
         return storeRepository.save(existingStore);
     }
     
-    // Filter by City
     public List<Store> getStoresByCity(String city) {
         return storeRepository.findByCityIgnoreCase(city);
     }
 
-    // New Method: Filter by State
     public List<Store> getStoresByState(String state) {
         return storeRepository.findByStateIgnoreCase(state);
     }
