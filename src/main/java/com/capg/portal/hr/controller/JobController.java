@@ -5,8 +5,6 @@ import com.capg.portal.hr.entity.Employee;
 import com.capg.portal.creator.entity.Publisher;
 import com.capg.portal.hr.service.JobService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +15,10 @@ import java.util.List;
 public class JobController 
 {
     private final JobService jobService;
-    private final EmployeeService employeeService;
 
     public JobController(JobService jobService) 
     {
         this.jobService = jobService;
-        this.employeeService = employeeService;
     }
 
     @GetMapping

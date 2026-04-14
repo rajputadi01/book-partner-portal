@@ -6,10 +6,6 @@ import com.capg.portal.catalog.entity.Title;
 import com.capg.portal.hr.entity.Employee;
 import com.capg.portal.retail.entity.Store;
 import com.capg.portal.creator.service.PublisherService;
-import com.capg.portal.hr.entity.Employee;
-import com.capg.portal.hr.service.EmployeeService;
-import com.capg.portal.catalog.entity.Title;
-import com.capg.portal.catalog.service.TitleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +17,10 @@ import java.util.List;
 public class PublisherController 
 {
     private final PublisherService publisherService;
-    private final EmployeeService employeeService;
-    private final TitleService titleService;
 
     public PublisherController(PublisherService publisherService) 
     {
         this.publisherService = publisherService;
-        this.employeeService = employeeService;
-        this.titleService = titleService;
     }
 
     @GetMapping
@@ -105,53 +97,5 @@ public class PublisherController
     public ResponseEntity<List<Store>> getStoresByPublisher(@PathVariable("id") String id) 
     {
         return new ResponseEntity<>(publisherService.getStoresByPublisherId(id), HttpStatus.OK);
-    }
-
-    // 8. GET: Employees by Publisher
-    @GetMapping("/{id}/employees")
-    public ResponseEntity<?> getEmployeesByPublisher(@PathVariable("id") String pubId) {
-        try {
-            publisherService.getPublisherById(pubId); // ensure exists
-            List<Employee> employees = employeeService.getEmployeesByPublisher(pubId);
-            return new ResponseEntity<>(employees, HttpStatus.OK); // 200 OK
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); // 404
-        }
-    }
-
-    // 9. GET: Titles by Publisher
-    @GetMapping("/{id}/titles")
-    public ResponseEntity<?> getTitlesByPublisher(@PathVariable("id") String pubId) {
-        try {
-            publisherService.getPublisherById(pubId); // ensure exists
-            return new ResponseEntity<>(titleService.getTitlesByPublisher(pubId), HttpStatus.OK); // 200 OK
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); // 404
-        }
-    }
-
-    // 10. POST: Create a title under a publisher
-    @PostMapping("/{id}/titles")
-    public ResponseEntity<?> createTitleForPublisher(@PathVariable("id") String pubId,
-                                                     @Valid @RequestBody Title title,
-                                                     BindingResult result) {
-
-        if (result.hasErrors()) {
-            List<String> errors = result.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST); // 400
-        }
-
-        try {
-            Publisher publisher = publisherService.getPublisherById(pubId);
-            title.setPublisher(publisher);
-            Title savedTitle = titleService.createTitle(title);
-            return new ResponseEntity<>(savedTitle, HttpStatus.CREATED); // 201
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); // 404 if publisher missing
-        } catch (Exception e) {
-            return new ResponseEntity<>("Database Error: Could not create title.", HttpStatus.CONFLICT); // 409/500 fallback
-        }
     }
 }
