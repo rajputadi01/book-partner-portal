@@ -10,7 +10,6 @@ import java.util.List;
 public interface StoreRepository extends JpaRepository<Store, String> {
     
     List<Store> findByCityIgnoreCase(String city);
-    
-    // New Method: Filter by State
     List<Store> findByStateIgnoreCase(String state);
+    
 }

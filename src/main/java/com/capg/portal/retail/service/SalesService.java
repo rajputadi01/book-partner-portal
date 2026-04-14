@@ -38,13 +38,29 @@ public class SalesService {
         return salesRepository.save(existing);
     }
     
-    // Filter by Store ID
     public List<Sales> getSalesByStoreId(String storId) {
         return salesRepository.findByStoreStorId(storId);
     }
 
-    // Filter by Title ID
     public List<Sales> getSalesByTitleId(String titleId) {
         return salesRepository.findByTitleTitleId(titleId);
+    }
+    
+    public int getTotalQtyByStore(String storId) {
+        return salesRepository.findByStoreStorId(storId)
+                .stream()
+                .mapToInt(Sales::getQty)
+                .sum();
+    }
+    
+    public long getTransactionCountByStore(String storId) {
+        return salesRepository.findByStoreStorId(storId).size();
+    }
+    
+    public int getTotalQtyByTitle(String titleId) {
+        return salesRepository.findByTitleTitleId(titleId)
+                .stream()
+                .mapToInt(Sales::getQty)
+                .sum();
     }
 }

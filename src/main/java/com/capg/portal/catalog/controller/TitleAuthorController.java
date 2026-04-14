@@ -18,18 +18,18 @@ public class TitleAuthorController {
 
     private final TitleAuthorService titleAuthorService;
 
-    // Constructor Injection
+   
     public TitleAuthorController(TitleAuthorService titleAuthorService) {
         this.titleAuthorService = titleAuthorService;
     }
 
-    // 1. GET Request: Get all title-author contracts
+ 
     @GetMapping
     public ResponseEntity<List<TitleAuthor>> getAllTitleAuthors() {
         return new ResponseEntity<>(titleAuthorService.getAllTitleAuthors(), HttpStatus.OK); // 200 OK
     }
 
-    // 2. GET Request: Get specific title-author contract by Composite Key (auId and titleId)
+   
     @GetMapping("/{auId}/{titleId}")
     public ResponseEntity<?> getTitleAuthorById(@PathVariable("auId") String auId, @PathVariable("titleId") String titleId) {
         try {
@@ -41,12 +41,12 @@ public class TitleAuthorController {
         }
     }
 
-    // 3. POST Request: Create a new title-author contract
+
     @PostMapping
     public ResponseEntity<?> createTitleAuthor(@Valid @RequestBody TitleAuthor titleAuthor, BindingResult result) 
     {
         
-        // 1. Validation Check
+  
         if (result.hasErrors()) {
             List<String> errors = result.getAllErrors().stream()
                     .map(error -> error.getDefaultMessage())
@@ -54,7 +54,7 @@ public class TitleAuthorController {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST); // 400 Bad Request
         }
 
-        // 2. Save to Database
+
         try {
             TitleAuthor savedTitleAuthor = titleAuthorService.createTitleAuthor(titleAuthor);
             return new ResponseEntity<>(savedTitleAuthor, HttpStatus.CREATED); // 201 Created
@@ -63,7 +63,7 @@ public class TitleAuthorController {
         }
     }
 
-    // 4. PUT Request: Update an existing contract
+
     @PutMapping("/{auId}/{titleId}")
     public ResponseEntity<?> updateTitleAuthor(
             @PathVariable("auId") String auId, 
@@ -71,7 +71,6 @@ public class TitleAuthorController {
             @Valid @RequestBody TitleAuthor titleAuthor, 
             BindingResult result) {
         
-        // 1. Validation Check
         if (result.hasErrors()) {
             List<String> errors = result.getAllErrors().stream()
                     .map(error -> error.getDefaultMessage())
@@ -79,7 +78,6 @@ public class TitleAuthorController {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST); // 400 Bad Request
         }
 
-        // 2. Update Database
         try {
             TitleAuthorId id = new TitleAuthorId(auId, titleId);
             TitleAuthor updatedTitleAuthor = titleAuthorService.updateTitleAuthor(id, titleAuthor);
@@ -89,21 +87,33 @@ public class TitleAuthorController {
         }
     }
 
-    // 5. GET Request: Filter by Max Royalty Percentage
+
     @GetMapping("/filter/royalty")
     public ResponseEntity<List<TitleAuthor>> filterTitleAuthorsByRoyalty(@RequestParam("maxRoyalty") Integer maxRoyalty) {
         return new ResponseEntity<>(titleAuthorService.getTitleAuthorsByRoyaltyLessThan(maxRoyalty), HttpStatus.OK); // 200 OK
     }
 
-    // 6. GET Request: Filter by Author ID
+
     @GetMapping("/filter/author")
     public ResponseEntity<List<TitleAuthor>> filterTitleAuthorsByAuthorId(@RequestParam("auId") String auId) {
         return new ResponseEntity<>(titleAuthorService.getTitleAuthorsByAuthorId(auId), HttpStatus.OK); // 200 OK
     }
 
-    // 7. GET Request: Filter by Title ID
+ 
     @GetMapping("/filter/title")
     public ResponseEntity<List<TitleAuthor>> filterTitleAuthorsByTitleId(@RequestParam("titleId") String titleId) {
         return new ResponseEntity<>(titleAuthorService.getTitleAuthorsByTitleId(titleId), HttpStatus.OK); // 200 OK
+    }
+    
+    
+    @GetMapping("/search")
+    public ResponseEntity<List<TitleAuthor>> search(
+            @RequestParam(required = false) String auId,
+            @RequestParam(required = false) String titleId,
+            @RequestParam(required = false) Integer maxRoyalty,
+            @RequestParam(required = false) Integer minRoyalty) {
+
+        List<TitleAuthor> result = titleAuthorService.search(auId, titleId, maxRoyalty, minRoyalty);
+        return ResponseEntity.ok(result);
     }
 }
