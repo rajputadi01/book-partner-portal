@@ -3,31 +3,46 @@ package com.capg.portal.catalog.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class TitleAuthorId implements Serializable {
-
+public class TitleAuthorId implements Serializable 
+{
     private String author; // Matches the field name in TitleAuthor
     private String title;  // Matches the field name in TitleAuthor
 
-    // Default Constructor
-    public TitleAuthorId() {
+    public TitleAuthorId() 
+    {
+    	
     }
 
-    // Parameterized Constructor
-    public TitleAuthorId(String author, String title) {
+    public TitleAuthorId(String author, String title) 
+    {
         this.author = author;
         this.title = title;
     }
 
-    // Getters and Setters
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
+    public String getAuthor() 
+    { 
+    	return author; 
+    }
+    
+    public void setAuthor(String author) 
+    { 
+    	this.author = author; 
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getTitle() 
+    { 
+    	return title; 
+    }
+    
+    public void setTitle(String title)
+    { 
+    	this.title = title; 
+    }
 
     // Required for Composite Keys
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) 
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TitleAuthorId that = (TitleAuthorId) o;
@@ -35,7 +50,8 @@ public class TitleAuthorId implements Serializable {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode() 
+    {
         return Objects.hash(author, title);
     }
 }

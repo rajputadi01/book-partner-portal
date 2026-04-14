@@ -43,7 +43,8 @@ public class TitleAuthorController {
 
 
     @PostMapping
-    public ResponseEntity<?> createTitleAuthor(@Valid @RequestBody TitleAuthor titleAuthor, BindingResult result) {
+    public ResponseEntity<?> createTitleAuthor(@Valid @RequestBody TitleAuthor titleAuthor, BindingResult result) 
+    {
         
   
         if (result.hasErrors()) {

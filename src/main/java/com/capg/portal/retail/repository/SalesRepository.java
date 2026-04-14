@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SalesRepository extends JpaRepository<Sales, SalesId> {
-    
+public interface SalesRepository extends JpaRepository<Sales, SalesId> 
+{
     List<Sales> findByStoreStorId(String storId);
-    
     List<Sales> findByTitleTitleId(String titleId);
 }
