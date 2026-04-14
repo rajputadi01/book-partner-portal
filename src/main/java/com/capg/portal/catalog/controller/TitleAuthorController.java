@@ -89,3 +89,4 @@ public class TitleAuthorController
     {
         return new ResponseEntity<>(titleAuthorService.search(auId, titleId, maxRoyalty, minRoyalty), HttpStatus.OK);
     }
+}
