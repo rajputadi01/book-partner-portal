@@ -41,11 +41,9 @@ public class Sales {
     @Column(name = "payterms", length = 12)
     private String payterms;
 
-    // Default Constructor
     public Sales() {
     }
 
-    // Parameterized Constructor
     public Sales(Store store, String ordNum, Title title, LocalDateTime ordDate, Short qty, String payterms) {
         this.store = store;
         this.ordNum = ordNum;
@@ -55,7 +53,6 @@ public class Sales {
         this.payterms = payterms;
     }
 
-    // Getters and Setters
     public Store getStore() { return store; }
     public void setStore(Store store) { this.store = store; }
 

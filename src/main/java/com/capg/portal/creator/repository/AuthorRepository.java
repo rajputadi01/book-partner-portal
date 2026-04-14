@@ -13,4 +13,5 @@ public interface AuthorRepository extends JpaRepository<Author, String>
     List<Author> findByCityIgnoreCase(String city);
     
     List<Author> findByStateIgnoreCase(String state);
+    
 }
