@@ -5,8 +5,8 @@ import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "jobs")
-public class Job {
-
+public class Job 
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "job_id", columnDefinition = "smallint")
@@ -27,28 +27,56 @@ public class Job {
     @Column(name = "max_lvl")
     private Integer maxLvl;
 
-    // Default Constructor
-    public Job() {
+    public Job() 
+    {
+    	
     }
 
-    // Parameterized Constructor
-    public Job(Short jobId, String jobDesc, Integer minLvl, Integer maxLvl) {
+    public Job(Short jobId, String jobDesc, Integer minLvl, Integer maxLvl) 
+    {
         this.jobId = jobId;
         this.jobDesc = jobDesc;
         this.minLvl = minLvl;
         this.maxLvl = maxLvl;
     }
 
-    // Getters and Setters
-    public Short getJobId() { return jobId; }
-    public void setJobId(Short jobId) { this.jobId = jobId; }
+    public Short getJobId() 
+    { 
+    	return jobId; 
+    }
+    
+    public void setJobId(Short jobId) 
+    { 
+    	this.jobId = jobId; 
+    }
 
-    public String getJobDesc() { return jobDesc; }
-    public void setJobDesc(String jobDesc) { this.jobDesc = jobDesc; }
+    public String getJobDesc() 
+    { 
+    	return jobDesc; 
+    }
+    
+    public void setJobDesc(String jobDesc) 
+    { 
+    	this.jobDesc = jobDesc; 
+    }
 
-    public Integer getMinLvl() { return minLvl; }
-    public void setMinLvl(Integer minLvl) { this.minLvl = minLvl; }
-
-    public Integer getMaxLvl() { return maxLvl; }
-    public void setMaxLvl(Integer maxLvl) { this.maxLvl = maxLvl; }
+    public Integer getMinLvl() 
+    { 
+    	return minLvl; 
+    }
+    
+    public void setMinLvl(Integer minLvl) 
+    { 
+    	this.minLvl = minLvl; 
+    }
+    
+    public Integer getMaxLvl() 
+    { 
+    	return maxLvl; 
+    }
+    
+    public void setMaxLvl(Integer maxLvl) 
+    { 
+    	this.maxLvl = maxLvl;
+    }
 }
