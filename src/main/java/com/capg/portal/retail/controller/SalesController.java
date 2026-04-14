@@ -6,112 +6,97 @@ import com.capg.portal.retail.service.SalesService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sales")
-public class SalesController {
-
+public class SalesController 
+{
     private final SalesService salesService;
 
-    // Constructor Injection
-    public SalesController(SalesService salesService) {
+    public SalesController(SalesService salesService) 
+    {
         this.salesService = salesService;
     }
 
-    // 1. GET Request: Get all sales
     @GetMapping
-    public ResponseEntity<List<Sales>> getAllSales() {
-        return new ResponseEntity<>(salesService.getAllSales(), HttpStatus.OK); // 200 OK
+    public ResponseEntity<List<Sales>> getAllSales() 
+    {
+        return new ResponseEntity<>(salesService.getAllSales(), HttpStatus.OK); 
     }
 
-    // 2. GET Request: Get specific sale by 3-part Composite Key
     @GetMapping("/{storId}/{ordNum}/{titleId}")
-    public ResponseEntity<?> getSaleById(
+    public ResponseEntity<Sales> getSaleById(
             @PathVariable("storId") String storId, 
             @PathVariable("ordNum") String ordNum, 
-            @PathVariable("titleId") String titleId) {
-        try {
-            SalesId id = new SalesId(storId, ordNum, titleId);
-            Sales sale = salesService.getSaleById(id);
-            return new ResponseEntity<>(sale, HttpStatus.OK); // 200 OK
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); // 404 Not Found
-        }
+            @PathVariable("titleId") String titleId) 
+    {
+        SalesId id = new SalesId(storId, ordNum, titleId);
+        return new ResponseEntity<>(salesService.getSaleById(id), HttpStatus.OK);
     }
 
-    // 3. POST Request: Create a new sale
     @PostMapping
-    public ResponseEntity<?> createSale(@Valid @RequestBody Sales sale, BindingResult result) {
-        
-        // 1. Validation Check
-        if (result.hasErrors()) {
-            List<String> errors = result.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST); // 400 Bad Request
-        }
-
-        // Failsafe for Order Date
-        if (sale.getOrdDate() == null) {
-            sale.setOrdDate(LocalDateTime.now());
-        }
-
-        // 2. Save to Database
-        try {
-            Sales savedSale = salesService.createSale(sale);
-            return new ResponseEntity<>(savedSale, HttpStatus.CREATED); // 201 Created
-        } catch (Exception e) {
-            return new ResponseEntity<>("Database Error: This Order Number already exists for this Store and Title.", HttpStatus.CONFLICT); // 409 Conflict
-        }
+    public ResponseEntity<Sales> createSale(@Valid @RequestBody Sales sale) 
+    {
+        return new ResponseEntity<>(salesService.createSale(sale), HttpStatus.CREATED); 
     }
 
-    // 4. PUT Request: Update an existing sale
     @PutMapping("/{storId}/{ordNum}/{titleId}")
-    public ResponseEntity<?> updateSale(
+    public ResponseEntity<Sales> updateSale(
             @PathVariable("storId") String storId, 
             @PathVariable("ordNum") String ordNum, 
             @PathVariable("titleId") String titleId, 
-            @Valid @RequestBody Sales sale, 
-            BindingResult result) {
-        
-        // 1. Validation Check
-        if (result.hasErrors()) {
-            List<String> errors = result.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST); // 400 Bad Request
-        }
-
-        // Failsafe for Order Date
-        if (sale.getOrdDate() == null) {
-            sale.setOrdDate(LocalDateTime.now());
-        }
-
-        // 2. Update Database
-        try {
-            SalesId id = new SalesId(storId, ordNum, titleId);
-            Sales updatedSale = salesService.updateSale(id, sale);
-            return new ResponseEntity<>(updatedSale, HttpStatus.OK); // 200 OK
-        } catch (Exception e) {
-            return new ResponseEntity<>("Database Error: Could not update the transaction.", HttpStatus.INTERNAL_SERVER_ERROR); // 500 Server Error
-        }
+            @Valid @RequestBody Sales sale) 
+    {
+        SalesId id = new SalesId(storId, ordNum, titleId);
+        return new ResponseEntity<>(salesService.updateSale(id, sale), HttpStatus.OK); 
     }
 
-    // 5. GET Request: Filter by Store ID
+    @PatchMapping("/{storId}/{ordNum}/{titleId}")
+    public ResponseEntity<Sales> patchSale(
+            @PathVariable("storId") String storId, 
+            @PathVariable("ordNum") String ordNum, 
+            @PathVariable("titleId") String titleId, 
+            @RequestBody Sales updates) 
+    {
+        SalesId id = new SalesId(storId, ordNum, titleId);
+        return new ResponseEntity<>(salesService.patchSale(id, updates), HttpStatus.OK);
+    }
+
     @GetMapping("/filter/store")
-    public ResponseEntity<List<Sales>> filterSalesByStore(@RequestParam("storId") String storId) {
-        return new ResponseEntity<>(salesService.getSalesByStoreId(storId), HttpStatus.OK); // 200 OK
+    public ResponseEntity<List<Sales>> filterSalesByStore(@RequestParam("storId") String storId) 
+    {
+        return new ResponseEntity<>(salesService.getSalesByStoreId(storId), HttpStatus.OK); 
     }
 
-    // 6. GET Request: Filter by Title ID
     @GetMapping("/filter/title")
-    public ResponseEntity<List<Sales>> filterSalesByTitle(@RequestParam("titleId") String titleId) {
-        return new ResponseEntity<>(salesService.getSalesByTitleId(titleId), HttpStatus.OK); // 200 OK
+    public ResponseEntity<List<Sales>> filterSalesByTitle(@RequestParam("titleId") String titleId) 
+    {
+        return new ResponseEntity<>(salesService.getSalesByTitleId(titleId), HttpStatus.OK); 
+    }
+
+    @GetMapping("/filter/payterms")
+    public ResponseEntity<List<Sales>> filterSalesByPayterms(@RequestParam("terms") String terms) 
+    {
+        return new ResponseEntity<>(salesService.getSalesByPayterms(terms), HttpStatus.OK); 
+    }
+
+    @GetMapping("/store/{storId}/total-qty")
+    public ResponseEntity<Integer> getTotalQtyByStore(@PathVariable("storId") String storId) 
+    {
+        return new ResponseEntity<>(salesService.getTotalQtyByStore(storId), HttpStatus.OK);
+    }
+    
+    @GetMapping("/store/{storId}/count")
+    public ResponseEntity<Long> getTransactionCountByStore(@PathVariable("storId") String storId) 
+    {
+        return new ResponseEntity<>(salesService.getTransactionCountByStore(storId), HttpStatus.OK);
+    }
+    
+    @GetMapping("/title/{titleId}/total-qty")
+    public ResponseEntity<Integer> getTotalQtyByTitle(@PathVariable("titleId") String titleId) 
+    {
+        return new ResponseEntity<>(salesService.getTotalQtyByTitle(titleId), HttpStatus.OK);
     }
 }
