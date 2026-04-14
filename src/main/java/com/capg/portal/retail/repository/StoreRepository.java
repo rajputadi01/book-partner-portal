@@ -10,5 +10,4 @@ public interface StoreRepository extends JpaRepository<Store, String>
 {
     List<Store> findByCityIgnoreCase(String city);
     List<Store> findByStateIgnoreCase(String state);
-    
 }

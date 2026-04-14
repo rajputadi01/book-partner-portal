@@ -79,15 +79,13 @@ public class TitleAuthorController
     {
         return new ResponseEntity<>(titleAuthorService.getLeadAuthors(), HttpStatus.OK);
     }
-    
+  
     @GetMapping("/search")
     public ResponseEntity<List<TitleAuthor>> search(
             @RequestParam(required = false) String auId,
             @RequestParam(required = false) String titleId,
             @RequestParam(required = false) Integer maxRoyalty,
-            @RequestParam(required = false) Integer minRoyalty) {
-
-        List<TitleAuthor> result = titleAuthorService.search(auId, titleId, maxRoyalty, minRoyalty);
-        return ResponseEntity.ok(result);
+            @RequestParam(required = false) Integer minRoyalty) 
+    {
+        return new ResponseEntity<>(titleAuthorService.search(auId, titleId, maxRoyalty, minRoyalty), HttpStatus.OK);
     }
-}
