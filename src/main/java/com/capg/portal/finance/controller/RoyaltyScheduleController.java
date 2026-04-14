@@ -94,4 +94,19 @@ public class RoyaltyScheduleController {
     public ResponseEntity<List<RoyaltySchedule>> filterRoyaltyByTitle(@RequestParam("titleId") String titleId) {
         return new ResponseEntity<>(royaltyScheduleService.getRoyaltySchedulesByTitleId(titleId), HttpStatus.OK); // 200 OK
     }
+    
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> patchRoyaltySchedule(
+            @PathVariable("id") Integer id,
+            @RequestBody RoyaltySchedule updates) {
+
+        try {
+            RoyaltySchedule updatedSchedule = royaltyScheduleService.patchRoyaltySchedule(id, updates);
+            return new ResponseEntity<>(updatedSchedule, HttpStatus.OK); // 200 OK
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); 
+        } catch (Exception e) {
+            return new ResponseEntity<>("Database Error: Could not partially update schedule.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

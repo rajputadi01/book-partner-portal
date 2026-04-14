@@ -102,7 +102,7 @@ public class SalesController {
         return new ResponseEntity<>(salesService.getSalesByTitleId(titleId), HttpStatus.OK); 
     }
     
-    @GetMapping("/store/{storId}/total-qty")
+    @GetMapping("/store/{storId}/totalqty")
     public ResponseEntity<Integer> getTotalQtyByStore(@PathVariable String storId) {
         return new ResponseEntity<>(
                 salesService.getTotalQtyByStore(storId),
@@ -119,10 +119,34 @@ public class SalesController {
     }
     
     
-    @GetMapping("/title/{titleId}/total-qty")
+    @GetMapping("/title/{titleId}/totalqty")
     public ResponseEntity<Integer> getTotalQtyByTitle(@PathVariable String titleId) {
         return new ResponseEntity<>(
                 salesService.getTotalQtyByTitle(titleId),
+                HttpStatus.OK
+        );
+    }
+    
+    @PatchMapping("/{storId}/{ordNum}/{titleId}")
+    public ResponseEntity<?> patchSale(
+            @PathVariable String storId,
+            @PathVariable String ordNum,
+            @PathVariable String titleId,
+            @RequestBody Sales updates) {
+
+        try {
+            SalesId id = new SalesId(storId, ordNum, titleId);
+            Sales updated = salesService.patchSale(id, updates);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/filter/payterms")
+    public ResponseEntity<List<Sales>> filterByPayterms(@RequestParam("terms") String terms) {
+        return new ResponseEntity<>(
+                salesService.getSalesByPayterms(terms),
                 HttpStatus.OK
         );
     }
