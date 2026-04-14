@@ -43,7 +43,8 @@ public class TitleAuthorController {
 
     // 3. POST Request: Create a new title-author contract
     @PostMapping
-    public ResponseEntity<?> createTitleAuthor(@Valid @RequestBody TitleAuthor titleAuthor, BindingResult result) {
+    public ResponseEntity<?> createTitleAuthor(@Valid @RequestBody TitleAuthor titleAuthor, BindingResult result) 
+    {
         
         // 1. Validation Check
         if (result.hasErrors()) {

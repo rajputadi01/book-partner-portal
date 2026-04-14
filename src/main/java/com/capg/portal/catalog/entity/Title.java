@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "titles")
-public class Title {
-
+public class Title 
+{
     @Id
     @NotBlank(message = "Title ID is required")
     @Size(max = 10, message = "Title ID cannot exceed 10 characters")
@@ -48,12 +48,13 @@ public class Title {
     @Column(name = "pubdate")
     private LocalDateTime pubdate;
 
-    // Default Constructor
-    public Title() {
+    public Title() 
+    {
+    	
     }
 
-    // Parameterized Constructor
-    public Title(String titleId, String titleName, String type, Publisher publisher, Double price, Double advance, Integer royalty, Integer ytdSales, String notes, LocalDateTime pubdate) {
+    public Title(String titleId, String titleName, String type, Publisher publisher, Double price, Double advance, Integer royalty, Integer ytdSales, String notes, LocalDateTime pubdate) 
+    {
         this.titleId = titleId;
         this.titleName = titleName;
         this.type = type;
@@ -66,34 +67,103 @@ public class Title {
         this.pubdate = pubdate;
     }
 
-    // Getters and Setters
-    public String getTitleId() { return titleId; }
-    public void setTitleId(String titleId) { this.titleId = titleId; }
+    public String getTitleId() 
+    { 
+    	return titleId; 
+    }
+    
+    public void setTitleId(String titleId) 
+    { 
+    	this.titleId = titleId; 
+    }
 
-    public String getTitleName() { return titleName; }
-    public void setTitleName(String titleName) { this.titleName = titleName; }
+    public String getTitleName() 
+    { 
+    	return titleName; 
+    }
+    
+    public void setTitleName(String titleName) 
+    { 
+    	this.titleName = titleName; 
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public String getType() 
+    { 
+    	return type; 
+    }
+    
+    public void setType(String type) 
+    { 
+    	this.type = type; 
+    }
 
-    public Publisher getPublisher() { return publisher; }
-    public void setPublisher(Publisher publisher) { this.publisher = publisher; }
+    public Publisher getPublisher() 
+    { 
+    	return publisher; 
+    }
+    
+    public void setPublisher(Publisher publisher) 
+    { 
+    	this.publisher = publisher; 
+    }
 
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
+    public Double getPrice() 
+    { 
+    	return price; 
+    }
+    
+    public void setPrice(Double price) 
+    { 
+    	this.price = price; 
+    }
 
-    public Double getAdvance() { return advance; }
-    public void setAdvance(Double advance) { this.advance = advance; }
+    public Double getAdvance() 
+    { 
+    	return advance; 
+    }
+    
+    public void setAdvance(Double advance) 
+    { 
+    	this.advance = advance; 
+    }
 
-    public Integer getRoyalty() { return royalty; }
-    public void setRoyalty(Integer royalty) { this.royalty = royalty; }
+    public Integer getRoyalty() 
+    { 
+    	return royalty; 
+    }
+    
+    public void setRoyalty(Integer royalty) 
+    { 
+    	this.royalty = royalty; 
+    }
 
-    public Integer getYtdSales() { return ytdSales; }
-    public void setYtdSales(Integer ytdSales) { this.ytdSales = ytdSales; }
+    public Integer getYtdSales() 
+    { 
+    	return ytdSales; 
+    }
+    
+    public void setYtdSales(Integer ytdSales) 
+    { 
+    	this.ytdSales = ytdSales;
+    }
 
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+    public String getNotes() 
+    { 
+    	return notes; 
+    }
+    
+    public void setNotes(String notes) 
+    { 
+    	this.notes = notes; 
+    }
 
-    public LocalDateTime getPubdate() { return pubdate; }
-    public void setPubdate(LocalDateTime pubdate) { this.pubdate = pubdate; }
+    public LocalDateTime getPubdate() 
+    { 
+    	return pubdate; 
+    }
+    
+    public void setPubdate(LocalDateTime pubdate) 
+    { 
+    	this.pubdate = pubdate; 
+    }
 }

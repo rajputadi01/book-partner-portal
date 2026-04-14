@@ -3,32 +3,31 @@ package com.capg.portal.catalog.controller;
 import com.capg.portal.catalog.entity.Title;
 import com.capg.portal.catalog.entity.TitleAuthor;
 import com.capg.portal.catalog.service.TitleService;
+import com.capg.portal.creator.entity.Author;
+import com.capg.portal.creator.entity.Publisher;
 import com.capg.portal.finance.entity.RoyaltySchedule;
 import com.capg.portal.retail.entity.Sales;
+import com.capg.portal.retail.entity.Store;
 
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/titles")
-public class TitleController {
-
+public class TitleController 
+{
     private final TitleService titleService;
-
+    
     public TitleController(TitleService titleService) 
     {
         this.titleService = titleService;
     }
-
-    // 1. GET Request: Get all titles
+    
     @GetMapping
     public ResponseEntity<List<Title>> getAllTitles() 
     {
@@ -36,114 +35,110 @@ public class TitleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getTitleById(@PathVariable("id") String id) {
-        try {
-            Title title = titleService.getTitleById(id);
-            return new ResponseEntity<>(title, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Title> getTitleById(@PathVariable("id") String id) 
+    {
+        Title title = titleService.getTitleById(id);
+        return new ResponseEntity<>(title, HttpStatus.OK);
     }
 
-    // 3. POST Request: Create a new title
     @PostMapping
-    public ResponseEntity<?> createTitle(@Valid @RequestBody Title title, BindingResult result) {
-        
-        // 1. Validation Check
-        if (result.hasErrors()) {
-            List<String> errors = result.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST); // 400 Bad Request
-        }
-        
-        // Cleanup empty strings & Failsafe date
-        if (title.getType() == null || title.getType().trim().isEmpty()) {
+    public ResponseEntity<Title> createTitle(@Valid @RequestBody Title title) 
+    {
+        if (title.getType() == null || title.getType().trim().isEmpty()) 
+        {
             title.setType("UNDECIDED");
         }
-        if (title.getPubdate() == null) {
+        
+        if (title.getPubdate() == null) 
+        {
             title.setPubdate(LocalDateTime.now());
         }
 
-        // 2. Save to Database
-        try {
-            Title savedTitle = titleService.createTitle(title);
-            return new ResponseEntity<>(savedTitle, HttpStatus.CREATED); // 201 Created
-        } catch (Exception e) {
-            return new ResponseEntity<>("Database Error: Title ID may already exist or violates constraints.", HttpStatus.CONFLICT); // 409 Conflict
-        }
+        Title savedTitle = titleService.createTitle(title);
+        return new ResponseEntity<>(savedTitle, HttpStatus.CREATED);
     }
 
-    // 4. PUT Request: Update an existing title
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTitle(@PathVariable("id") String id, @Valid @RequestBody Title title, BindingResult result) {
-        
-        // 1. Validation Check
-        if (result.hasErrors()) {
-            List<String> errors = result.getAllErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST); // 400 Bad Request
-        }
-
-        // Cleanup empty strings & Failsafe date
-        if (title.getType() == null || title.getType().trim().isEmpty()) {
+    public ResponseEntity<Title> updateTitle(@PathVariable("id") String id, @Valid @RequestBody Title title) 
+    {
+        if (title.getType() == null || title.getType().trim().isEmpty()) 
+        {
             title.setType("UNDECIDED");
         }
-        if (title.getPubdate() == null) {
+        
+        if (title.getPubdate() == null) 
+        {
             title.setPubdate(LocalDateTime.now());
         }
 
-        // 2. Update Database
-        try {
-            Title updatedTitle = titleService.updateTitle(id, title);
-            return new ResponseEntity<>(updatedTitle, HttpStatus.OK); // 200 OK
-        } catch (Exception e) {
-            return new ResponseEntity<>("Database Error: Could not update title.", HttpStatus.INTERNAL_SERVER_ERROR); // 500 Server Error
-        }
-    }
-
-    // 5. GET Request: Filter by Max Price
-    @GetMapping("/filter/price")
-    public ResponseEntity<List<Title>> filterTitlesByPrice(@RequestParam("maxPrice") Double maxPrice) {
-        return new ResponseEntity<>(titleService.getTitlesByPriceLessThan(maxPrice), HttpStatus.OK); // 200 OK
-    }
-
-    // 6. GET Request: Filter by Type
-    @GetMapping("/filter/type")
-    public ResponseEntity<List<Title>> filterTitlesByType(@RequestParam("type") String type) {
-        return new ResponseEntity<>(titleService.getTitlesByType(type), HttpStatus.OK); // 200 OK
-    }
-
-    // 7. GET Request: Filter by Publisher ID
-    @GetMapping("/filter/publisher")
-    public ResponseEntity<List<Title>> filterTitlesByPublisher(@RequestParam("pubId") String pubId) {
-        return new ResponseEntity<>(titleService.getTitlesByPublisher(pubId), HttpStatus.OK); // 200 OK
-    }
-
-    // 8. GET Request: Filter by Publish Date Before
-    // Example Postman URL: /filter/date?beforeDate=2024-01-01T00:00:00
-    @GetMapping("/filter/date")
-    public ResponseEntity<List<Title>> filterTitlesByDateBefore(
-            @RequestParam("beforeDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime beforeDate) {
-        return new ResponseEntity<>(titleService.getTitlesPublishedBefore(beforeDate), HttpStatus.OK); // 200 OK
+        Title updatedTitle = titleService.updateTitle(id, title);
+        return new ResponseEntity<>(updatedTitle, HttpStatus.OK);
     }
     
- // 1. Get all sales for a specific title
+    @PatchMapping("/{id}")
+    public ResponseEntity<Title> patchTitle(@PathVariable("id") String id, @RequestBody Title updates) 
+    {
+        Title updatedTitle = titleService.patchTitle(id, updates);
+        return new ResponseEntity<>(updatedTitle, HttpStatus.OK);
+    }
+
+    @GetMapping("/filter/price")
+    public ResponseEntity<List<Title>> filterTitlesByPrice(@RequestParam("maxPrice") Double maxPrice) 
+    {
+        return new ResponseEntity<>(titleService.getTitlesByPriceLessThan(maxPrice), HttpStatus.OK);
+    }
+
+    @GetMapping("/filter/type")
+    public ResponseEntity<List<Title>> filterTitlesByType(@RequestParam("type") String type) 
+    {
+        return new ResponseEntity<>(titleService.getTitlesByType(type), HttpStatus.OK);
+    }
+
+    @GetMapping("/filter/publisher")
+    public ResponseEntity<List<Title>> filterTitlesByPublisher(@RequestParam("pubId") String pubId) 
+    {
+        return new ResponseEntity<>(titleService.getTitlesByPublisher(pubId), HttpStatus.OK);
+    }
+
+    @GetMapping("/filter/date")
+    public ResponseEntity<List<Title>> filterTitlesByDateBefore(@RequestParam("beforeDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime beforeDate) 
+    {
+        return new ResponseEntity<>(titleService.getTitlesPublishedBefore(beforeDate), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/publisher")
+    public ResponseEntity<Publisher> getPublisherByTitle(@PathVariable("id") String id) 
+    {
+        return new ResponseEntity<>(titleService.getPublisherByTitleId(id), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}/sales")
-    public ResponseEntity<List<Sales>> getTitleSales(@PathVariable String id) {
-        return ResponseEntity.ok(titleService.getSalesByTitle(id));
+    public ResponseEntity<List<Sales>> getSalesByTitle(@PathVariable("id") String id) 
+    {
+        return new ResponseEntity<>(titleService.getSalesByTitleId(id), HttpStatus.OK);
     }
 
-    // 2. Get all royalty schedules for a specific title
     @GetMapping("/{id}/royalties")
-    public ResponseEntity<List<RoyaltySchedule>> getTitleRoyalties(@PathVariable String id) {
-        return ResponseEntity.ok(titleService.getRoyaltiesByTitle(id));
+    public ResponseEntity<List<RoyaltySchedule>> getRoyaltiesByTitle(@PathVariable("id") String id) 
+    {
+        return new ResponseEntity<>(titleService.getRoyaltiesByTitleId(id), HttpStatus.OK);
     }
 
-    // 3. Get all authors mapped to this title
+    @GetMapping("/{id}/title-authors")
+    public ResponseEntity<List<TitleAuthor>> getTitleAuthorsByTitle(@PathVariable("id") String id) 
+    {
+        return new ResponseEntity<>(titleService.getTitleAuthorsByTitleId(id), HttpStatus.OK);
+    }
+    
     @GetMapping("/{id}/authors")
-    public ResponseEntity<List<TitleAuthor>> getTitleAuthors(@PathVariable String id) {
-        return ResponseEntity.ok(titleService.getAuthorsByTitle(id));
+    public ResponseEntity<List<Author>> getAuthorsByTitle(@PathVariable("id") String id) 
+    {
+        return new ResponseEntity<>(titleService.getAuthorsByTitleId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/stores")
+    public ResponseEntity<List<Store>> getStoresByTitle(@PathVariable("id") String id) 
+    {
+        return new ResponseEntity<>(titleService.getStoresByTitleId(id), HttpStatus.OK);
     }
 }
