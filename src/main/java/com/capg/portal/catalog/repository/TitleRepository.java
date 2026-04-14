@@ -8,17 +8,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface TitleRepository extends JpaRepository<Title, String> {
-    
-    // Existing filter
+public interface TitleRepository extends JpaRepository<Title, String> 
+{
     List<Title> findByPriceLessThan(Double maxPrice);
 
-    // New Method: Filter by Type
     List<Title> findByTypeIgnoreCase(String type);
 
-    // New Method: Filter by Publisher ID
     List<Title> findByPublisherPubId(String pubId);
 
-    // New Method: Filter by Publish Date before a specific date
     List<Title> findByPubdateBefore(LocalDateTime date);
 }
