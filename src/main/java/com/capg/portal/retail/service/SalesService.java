@@ -104,12 +104,27 @@ public class SalesService
                 .mapToInt(Sales::getQty)
                 .sum();
     }
+    
+    public Sales patchSale(SalesId id, Sales updates) {
 
-    private void processDefaults(Sales sale) 
-    {
-        if (sale.getOrdDate() == null) 
-        {
-            sale.setOrdDate(LocalDateTime.now());
+        Sales existing = getSaleById(id);
+
+        if (updates.getOrdDate() != null) {
+            existing.setOrdDate(updates.getOrdDate());
         }
+
+        if (updates.getQty() != null) {
+            existing.setQty(updates.getQty());
+        }
+
+        if (updates.getPayterms() != null) {
+            existing.setPayterms(updates.getPayterms());
+        }
+
+        return salesRepository.save(existing);
+    }
+    
+    public List<Sales> getSalesByPayterms(String terms) {
+        return salesRepository.findByPayterms(terms);
     }
 }

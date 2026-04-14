@@ -11,5 +11,6 @@ public interface SalesRepository extends JpaRepository<Sales, SalesId>
 {
     List<Sales> findByStoreStorId(String storId);
     List<Sales> findByTitleTitleId(String titleId);
-    List<Sales> findByPaytermsIgnoreCase(String payterms);
+    
+    List<Sales> findByPayterms(String payterms);
 }
