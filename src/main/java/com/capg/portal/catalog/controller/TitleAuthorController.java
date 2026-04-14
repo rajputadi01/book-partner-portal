@@ -79,7 +79,7 @@ public class TitleAuthorController
     {
         return new ResponseEntity<>(titleAuthorService.getLeadAuthors(), HttpStatus.OK);
     }
-
+  
     @GetMapping("/search")
     public ResponseEntity<List<TitleAuthor>> search(
             @RequestParam(required = false) String auId,
@@ -89,4 +89,3 @@ public class TitleAuthorController
     {
         return new ResponseEntity<>(titleAuthorService.search(auId, titleId, maxRoyalty, minRoyalty), HttpStatus.OK);
     }
-}
