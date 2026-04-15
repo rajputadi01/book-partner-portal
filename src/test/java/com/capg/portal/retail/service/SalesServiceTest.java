@@ -103,6 +103,7 @@ public class SalesServiceTest {
         when(salesRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
+        		
                 () -> salesService.getSaleById(id));
     }
 
