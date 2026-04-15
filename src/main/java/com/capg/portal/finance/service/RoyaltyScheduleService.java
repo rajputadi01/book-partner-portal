@@ -2,7 +2,7 @@ package com.capg.portal.finance.service;
 
 import com.capg.portal.finance.entity.RoyaltySchedule;
 import com.capg.portal.finance.repository.RoyaltyScheduleRepository;
-import com.capg.portal.finance.exception.*;
+import com.capg.portal.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -51,27 +51,20 @@ public class RoyaltyScheduleService
     {
         RoyaltySchedule existing = getRoyaltyScheduleById(id);
 
-        // Resolve final values (important for validation)
-        Integer finalLorange = (updates.getLorange() != null) ? updates.getLorange() : existing.getLorange();
-        Integer finalHirange = (updates.getHirange() != null) ? updates.getHirange() : existing.getHirange();
-
-        // Validate merged values
+        // We must evaluate the new combined state before applying it
+        Integer finalLorange = updates.getLorange() != null ? updates.getLorange() : existing.getLorange();
+        Integer finalHirange = updates.getHirange() != null ? updates.getHirange() : existing.getHirange();
+        
         validateRange(finalLorange, finalHirange);
 
-        // Apply updates
         existing.setLorange(finalLorange);
         existing.setHirange(finalHirange);
 
-        if (updates.getTitle() != null) {
-            existing.setTitle(updates.getTitle());
-        }
-
-        if (updates.getRoyalty() != null) {
-            existing.setRoyalty(updates.getRoyalty());
-        }
+        if (updates.getTitle() != null) existing.setTitle(updates.getTitle());
+        if (updates.getRoyalty() != null) existing.setRoyalty(updates.getRoyalty());
 
         return royaltyScheduleRepository.save(existing);
-    } 
+    }
     
     public List<RoyaltySchedule> getRoyaltySchedulesByRange(Integer minLorange, Integer maxHirange) 
     {
@@ -90,7 +83,4 @@ public class RoyaltyScheduleService
             throw new IllegalArgumentException("Validation Failed: Low range (" + lorange + ") must be strictly less than High range (" + hirange + ").");
         }
     }
-    
-    
-    
 }
