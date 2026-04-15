@@ -13,7 +13,6 @@ import com.capg.portal.exception.ResourceAlreadyExistsException;
 import com.capg.portal.exception.ResourceNotFoundException;
 import com.capg.portal.finance.entity.Discount;
 import com.capg.portal.finance.repository.DiscountRepository;
-
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
