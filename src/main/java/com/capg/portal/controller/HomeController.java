@@ -1,16 +1,13 @@
-package com.capg.portal.controller; // Ensure this matches your package structure
+package com.capg.portal.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+@Controller // Use @Controller instead of @RestController
 public class HomeController {
 
     @GetMapping("/")
-    public ModelAndView viewHomePage() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("index"); // Tells Spring to look for index.html
-        return mav;
+    public String viewHomePage() {
+        return "index"; // Spring automatically looks for src/main/resources/templates/index.html
     }
 }
