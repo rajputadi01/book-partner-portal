@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Title Details')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <h2>Title Details Record</h2>
+        <div style="background: #fdfefe; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+            <p><strong>Title ID:</strong> <span th:text="${title.titleId}"></span></p>
+            <p><strong>Name:</strong> <span th:text="${title.titleName}"></span></p>
+            <p><strong>Genre/Type:</strong> <span th:text="${title.type}"></span></p>
+            <hr>
+            <p><strong>Publisher ID:</strong> <span th:text="${title.publisher != null ? title.publisher.pubId : 'Self-Published / Null'}"></span></p>
+            <p><strong>Price:</strong> $<span th:text="${title.price}"></span></p>
+            <p><strong>Advance:</strong> $<span th:text="${title.advance}"></span></p>
+            <p><strong>Standard Royalty:</strong> <span th:text="${title.royalty}"></span>%</p>
+            <p><strong>YTD Sales:</strong> <span th:text="${title.ytdSales}"></span> units</p>
+            <p><strong>Notes:</strong> <span th:text="${title.notes}"></span></p>
+            <p><strong>Publication Date:</strong> <span th:text="${#temporals.format(title.pubdate, 'yyyy-MM-dd HH:mm')}"></span></p>
+        </div>
+        <br><a th:href="@{/web/titles/operations}" class="btn">&larr; Back to Menu</a>
+    </div>
+</body>
+</html>
