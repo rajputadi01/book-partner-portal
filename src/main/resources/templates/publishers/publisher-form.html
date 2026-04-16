@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Publisher Form')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <h2 th:text="${formTitle}"></h2>
+        
+        <div th:if="${errorMessage != null}" style="background: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px;" th:text="${errorMessage}"></div>
+        
+        <form th:action="${actionUrl}" th:object="${publisher}" method="post">
+            <input type="hidden" name="isUpdate" th:value="${isUpdate}">
+            
+            <div class="form-group">
+                <label>Publisher ID (4 chars):</label>
+                <input type="text" th:field="*{pubId}" th:readonly="${isUpdate}" th:style="${isUpdate ? 'background-color: #eee;' : ''}">
+                <span class="error" th:if="${#fields.hasErrors('pubId')}" th:errors="*{pubId}"></span>
+            </div>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" th:field="*{pubName}">
+                <span class="error" th:if="${#fields.hasErrors('pubName')}" th:errors="*{pubName}"></span>
+            </div>
+            <div class="form-group">
+                <label>City:</label>
+                <input type="text" th:field="*{city}">
+            </div>
+            <div class="form-group">
+                <label>State (2 chars):</label>
+                <input type="text" th:field="*{state}">
+                <span class="error" th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></span>
+            </div>
+            <div class="form-group">
+                <label>Country:</label>
+                <input type="text" th:field="*{country}">
+            </div>
+            <button type="submit" class="btn btn-success">Submit Payload</button>
+            <a th:href="@{/web/publishers/operations}" class="btn btn-danger">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

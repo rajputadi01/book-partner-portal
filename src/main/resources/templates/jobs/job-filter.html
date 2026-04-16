@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Filter Jobs')}"> </head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container" style="max-width: 500px;">
+        <h2>Execute: getJobsBetween (GET)</h2>
+        <form th:action="@{/web/jobs/filter/result}" method="get">
+            <div class="form-group"><label>Min Level:</label><input type="number" name="minLvl" required></div>
+            <div class="form-group"><label>Max Level:</label><input type="number" name="maxLvl" required></div>
+            <button type="submit" class="btn btn-success">Execute Query</button>
+            <a th:href="@{/web/jobs/operations}" class="btn btn-danger">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

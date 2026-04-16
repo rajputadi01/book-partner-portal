@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Input Parameter')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container" style="max-width: 500px; text-align: center;">
+        <h2 th:text="${formTitle}"></h2>
+        <form th:action="${actionUrl}" method="get">
+            <div class="form-group">
+                <label>Target Publisher ID (4 chars):</label>
+                <input type="text" name="id" maxlength="4" required style="text-align: center; font-size: 18px;">
+            </div>
+            <button type="submit" class="btn btn-success">Execute Request</button>
+            <a th:href="@{/web/publishers/operations}" class="btn btn-danger">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

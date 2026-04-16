@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Publishers Harness')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <h1 style="border-bottom: 2px solid #3498db; padding-bottom: 10px;">Publishers: Operations Menu</h1>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+            <a th:href="@{/web/publishers/create}" class="btn btn-success">1. Create Publisher</a>
+            <a th:href="@{/web/publishers/get-all}" class="btn">2. Get All Publishers</a>
+            <a th:href="@{/web/publishers/get-by-id}" class="btn">3. Get Publisher By Id</a>
+            <a th:href="@{/web/publishers/update}" class="btn" style="background-color: #f39c12;">4. Update Publisher</a>
+            <a th:href="@{/web/publishers/patch}" class="btn" style="background-color: #e67e22;">5. Patch Publisher</a>
+            <a th:href="@{/web/publishers/filter/city}" class="btn">6. Filter Publishers by City</a>
+            <a th:href="@{/web/publishers/filter/state}" class="btn">7. FIlter Publisher by State</a>
+            <a th:href="@{/web/publishers/filter/country}" class="btn">8. Get Publishers By Country</a>
+            <a th:href="@{/web/publishers/relational/employees}" class="btn" style="background-color: #9b59b6;">9. Get Employees By Publisher Id </a>
+            <a th:href="@{/web/publishers/relational/titles}" class="btn" style="background-color: #9b59b6;">10. Get Titles By Publisher Id</a>
+            <a th:href="@{/web/publishers/relational/authors}" class="btn" style="background-color: #9b59b6;">11. Get Authors By Publisher Id</a>
+            <a th:href="@{/web/publishers/relational/stores}" class="btn" style="background-color: #9b59b6;">12. Get Stores By Publisher Id</a>
+        </div>
+    </div>
+</body>
+</html>
