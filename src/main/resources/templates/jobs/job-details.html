@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Job Details')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <h2>Job Details Record</h2>
+        <div style="background: #fdfefe; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+            <p><strong>Job ID:</strong> <span th:text="${job.jobId}"></span></p>
+            <p><strong>Description:</strong> <span th:text="${job.jobDesc}"></span></p>
+            <p><strong>Allowed Level Range:</strong> <span th:text="${job.minLvl} + ' - ' + ${job.maxLvl}"></span></p>
+        </div>
+        <br>
+        <a th:href="@{/web/jobs/operations}" class="btn">&larr; Back to Menu</a>
+    </div>
+</body>
+</html>

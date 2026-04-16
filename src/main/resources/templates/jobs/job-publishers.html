@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Publishers for Job')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <h2>Publishers Employing Job ID: <span th:text="${targetId}"></span></h2>
+        <a th:href="@{/web/jobs/operations}" class="btn" style="margin-bottom: 15px;">&larr; Menu</a>
+        <table>
+            <thead><tr><th>Pub ID</th><th>Publisher Name</th><th>City</th></tr></thead>
+            <tbody><tr th:each="pub : ${publishers}">
+                <td th:text="${pub.pubId}"></td><td th:text="${pub.pubName}"></td><td th:text="${pub.city}"></td>
+            </tr></tbody>
+        </table>
+    </div>
+</body>
+</html>

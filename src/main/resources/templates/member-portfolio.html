@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Portfolio - ' + ${memberName})}"></head>
+<body>
+    
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <style>
+        .entity-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .entity-card {
+            background: white;
+            border-radius: 10px;
+            width: 350px;
+            text-decoration: none;
+            color: #2c3e50;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .entity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .entity-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 4px solid #3498db;
+        }
+        
+        .entity-card h2 {
+            margin: 0;
+            padding: 20px 20px 10px 20px;
+            text-align: center;
+            font-size: 26px;
+        }
+
+        .entity-card p {
+            text-align: center;
+            padding: 0 20px 20px;
+            color: #7f8c8d;
+            margin: 0;
+            font-size: 15px;
+        }
+    </style>
+
+    <div class="container" style="max-width: 1200px;">
+        <h1 style="text-transform: capitalize; border-bottom: 2px solid #3498db; padding-bottom: 10px;" 
+            th:text="|${memberName}'s Application Modules|">Dashboard</h1>
+        
+        <div th:if="${memberName == 'shireen'}" class="entity-container">
+            <a th:href="@{/web/jobs/operations}" class="entity-card">
+                <img th:src="@{/images/jobs.jpg}" alt="Jobs">
+                <h2>Jobs Module</h2>
+                <p>Manage publishing firm positions and clearance levels.</p>
+            </a>
+
+            <a th:href="@{/web/publishers/operations}" class="entity-card">
+                <img th:src="@{/images/publishers.jpg}" alt="Publishers">
+                <h2>Publishers Module</h2>
+                <p>Manage publishing houses, employees, and portfolios.</p>
+            </a>
+        </div>
+
+        <div th:if="${memberName == 'aditya'}" class="entity-container">
+            <a th:href="@{/web/employees/operations}" class="entity-card">
+                <img th:src="@{/images/employees.jpg}" alt="Employees">
+                <h2>Employees Module</h2>
+                <p>Manage personnel, job assignments, and hiring.</p>
+            </a>
+
+            <a th:href="@{/web/titles/operations}" class="entity-card">
+                <img th:src="@{/images/titles.jpg}" alt="Titles">
+                <h2>Titles Module</h2>
+                <p>Manage the central book catalog and pricing.</p>
+            </a>
+        </div>
+
+        <div th:if="${memberName == 'sakshi'}" class="entity-container">
+            <a th:href="@{/web/authors/operations}" class="entity-card">
+                <img th:src="@{/images/authors.jpg}" alt="Authors">
+                <h2>Authors Module</h2>
+                <p>Manage writers, contracts, and contact information.</p>
+            </a>
+
+            <a th:href="@{/web/stores/operations}" class="entity-card">
+                <img th:src="@{/images/stores.jpg}" alt="Stores">
+                <h2>Stores Module</h2>
+                <p>Manage retail locations and business partnerships.</p>
+            </a>
+        </div>
+
+        <div th:if="${memberName == 'prathamesh'}" class="entity-container">
+            <a th:href="@{/web/sales/operations}" class="entity-card">
+                <img th:src="@{/images/sales.jpg}" alt="Sales">
+                <h2>Sales Module</h2>
+                <p>Manage retail transaction ledgers and order analytics.</p>
+            </a>
+
+            <a th:href="@{/web/roysched/operations}" class="entity-card">
+                <img th:src="@{/images/roysched.jpg}" alt="Royalty Schedules">
+                <h2>Royalty Schedules Module</h2>
+                <p>Manage tiered author payout brackets based on sales volume.</p>
+            </a>
+        </div>
+
+        <div th:if="${memberName == 'rajas'}" class="entity-container">
+            <a th:href="@{/web/discounts/operations}" class="entity-card">
+                <img th:src="@{/images/discounts.jpg}" alt="Discounts">
+                <h2>Discounts Module</h2>
+                <p>Manage global and store-specific promotional pricing.</p>
+            </a>
+
+            <a th:href="@{/web/titleauthors/operations}" class="entity-card">
+                <img th:src="@{/images/titleauthors.jpg}" alt="Title Authors">
+                <h2>Title-Authors Module</h2>
+                <p>Manage book contracts, lead authors, and royalty splits.</p>
+            </a>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Publisher Details')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <h2>Publisher Details Record</h2>
+        <div style="background: #fdfefe; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+            <p><strong>ID:</strong> <span th:text="${publisher.pubId}"></span></p>
+            <p><strong>Name:</strong> <span th:text="${publisher.pubName}"></span></p>
+            <p><strong>Location:</strong> <span th:text="${publisher.city + ', ' + publisher.state + ' - ' + publisher.country}"></span></p>
+        </div>
+        <br><a th:href="@{/web/publishers/operations}" class="btn">&larr; Back to Menu</a>
+    </div>
+</body>
+</html>
