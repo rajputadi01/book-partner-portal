@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Employee Results')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <h2 th:text="${pageTitle}"></h2>
+        <a th:href="@{/web/employees/operations}" class="btn" style="margin-bottom: 15px;">&larr; Back to Menu</a>
+        <table>
+            <thead><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Job ID</th><th>Job Lvl</th><th>Pub ID</th></tr></thead>
+            <tbody>
+                <tr th:each="emp : ${employees}">
+                    <td th:text="${emp.empId}"></td>
+                    <td th:text="${emp.fname}"></td>
+                    <td th:text="${emp.lname}"></td>
+                    <td th:text="${emp.job != null ? emp.job.jobId : ''}"></td>
+                    <td th:text="${emp.jobLvl}"></td>
+                    <td th:text="${emp.publisher != null ? emp.publisher.pubId : ''}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

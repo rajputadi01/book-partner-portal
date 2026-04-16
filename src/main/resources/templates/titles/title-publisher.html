@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments :: head('Publisher Data')}"></head>
+<body>
+    <div th:replace="~{fragments :: navbar}"></div>
+    <div class="container">
+        <h2>Publisher for Title ID: <span th:text="${targetId}"></span></h2>
+        <a th:href="@{/web/titles/operations}" class="btn" style="margin-bottom: 15px;">&larr; Back to Menu</a>
+        
+        <div th:if="${publisher == null}" style="background-color: #f8ecec; color: #8a6d3b; padding: 20px; border-radius: 5px; border-left: 5px solid #f39c12;">
+            <h3>Self-Published Title</h3>
+            <p>This title does not have an assigned Publisher ID (Foreign Key is NULL).</p>
+        </div>
+
+        <div th:if="${publisher != null}">
+            <table>
+                <thead><tr><th>Pub ID</th><th>Publisher Name</th><th>City</th><th>State</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td th:text="${publisher.pubId}"></td>
+                        <td th:text="${publisher.pubName}"></td>
+                        <td th:text="${publisher.city}"></td>
+                        <td th:text="${publisher.state}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
