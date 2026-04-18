@@ -47,8 +47,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/").permitAll() // UNLOCKS THE HOME PAGE
-                .anyRequest().authenticated()     // LOCKS EVERYTHING ELSE
+                .requestMatchers("/").permitAll() 
+                .anyRequest().permitAll()     // <--- CHANGED THIS TO permitAll()
             )
             .httpBasic(Customizer.withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
