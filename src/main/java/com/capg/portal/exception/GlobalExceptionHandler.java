@@ -1,89 +1,88 @@
 package com.capg.portal.exception;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler 
 {
-    // Helper method to determine if the request came from our Thymeleaf UI
-    private boolean isWebUiRequest(HttpServletRequest request) 
-    {
-        return request.getRequestURI().startsWith("/web/") || request.getRequestURI().equals("/");
-    }
-
-    // Helper method to build the HTML Error Page
-    private ModelAndView buildErrorPage(HttpStatus status, String error, String message, HttpServletRequest request) 
-    {
-        ModelAndView mav = new ModelAndView("error");
-        mav.addObject("status", status.value());
-        mav.addObject("error", error);
-        mav.addObject("message", message);
-        mav.addObject("path", request.getRequestURI());
-        mav.addObject("timestamp", LocalDateTime.now());
-        return mav;
-    }
-
-    // Helper method to build the JSON REST Response
-    private ResponseEntity<ErrorResponse> buildJsonResponse(HttpStatus status, String error, String message, HttpServletRequest request) 
-    {
-        ErrorResponse errorResponse = new ErrorResponse(status.value(), error, message, request.getRequestURI());
-        return new ResponseEntity<>(errorResponse, status);
-    }
-
     // 1. Handle 404 - Resource Not Found
     @ExceptionHandler(ResourceNotFoundException.class)
-    public Object handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request) 
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) 
     {
-        if (isWebUiRequest(request)) return buildErrorPage(HttpStatus.NOT_FOUND, "Resource Not Found", ex.getMessage(), request);
-        return buildJsonResponse(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage(), request);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    // 2. Handle 409 - Resource Already Exists
+    // 2. Handle 409 - Resource Already Exists (Database conflicts)
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public Object handleResourceAlreadyExists(ResourceAlreadyExistsException ex, HttpServletRequest request) 
+    public ResponseEntity<ErrorResponse> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, WebRequest request) 
     {
-        if (isWebUiRequest(request)) return buildErrorPage(HttpStatus.CONFLICT, "Data Conflict", ex.getMessage(), request);
-        return buildJsonResponse(HttpStatus.CONFLICT, "Conflict", ex.getMessage(), request);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    // 3. Handle 400 - Business Logic Validation (Like the 100% Royalty Rule)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public Object handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) 
-    {
-        if (isWebUiRequest(request)) return buildErrorPage(HttpStatus.BAD_REQUEST, "Invalid Request", ex.getMessage(), request);
-        return buildJsonResponse(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage(), request);
-    }
-
-    // 4. Handle 400 - Validation Errors (@Valid annotations in REST payload)
+    // 3. Handle 400 - Validation Errors (@Valid annotations)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Object handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) 
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) 
     {
+        // Extract all validation messages and join them into a single string
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
 
-        if (isWebUiRequest(request)) return buildErrorPage(HttpStatus.BAD_REQUEST, "Validation Failed", errorMessage, request);
-        return buildJsonResponse(HttpStatus.BAD_REQUEST, "Validation Failed", errorMessage, request);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation Failed",
+                errorMessage,
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // 5. Handle 500 - Global Fallback (Unexpected errors)
+    // 4. Handle 500 - Global Fallback (Unexpected errors, NullPointers, DB Connection loss)
     @ExceptionHandler(Exception.class)
-    public Object handleGlobalException(Exception ex, HttpServletRequest request) 
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, WebRequest request) 
     {
-        ex.printStackTrace(); // Keep for server logs
         
-        String msg = "An unexpected error occurred. Please try again or contact support.";
-        if (isWebUiRequest(request)) return buildErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "System Error", msg, request);
-        return buildJsonResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", msg, request);
+        ex.printStackTrace(); // Keep this for your server logs
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Internal Server Error",
+                "An unexpected error occurred. Please contact support.",
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    // 5. Handle 400 - Business Logic Validation (Like the 100% Royalty Rule)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) 
+    {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(), // This grabs our exact text: "Validation Failed: Total royalty..."
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
