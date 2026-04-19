@@ -2,53 +2,40 @@ package com.capg.portal.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
 
-    // 1. Password Encoder (Best practice, Spring Security expects encrypted passwords)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 2. Define the In-Memory Users and their Roles
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin123"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails staff = User.builder()
-                .username("staff")
-                .password(passwordEncoder().encode("staff123"))
-                .roles("EMPLOYEE")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, staff);
-    }
-
-    // 3. Define the Authorization Rules
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception 
-    {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable()) // Disabled for simplicity in REST APIs
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/").permitAll() 
-                .anyRequest().permitAll()     // <--- CHANGED THIS TO permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll() // ADD THIS LINE
+                
+                // 1. Anyone authenticated can READ (GET) data
+                .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "STAFF")
+                
+                // 2. ONLY Admins can CREATE, UPDATE, PATCH, or DELETE data
+                .requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+                
+                // 3. Fallback: Any other request must be authenticated
+                .anyRequest().authenticated() 
             )
             .httpBasic(Customizer.withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
